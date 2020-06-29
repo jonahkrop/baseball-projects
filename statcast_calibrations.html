@@ -13082,8 +13082,8 @@ div#notebook {
 <p>There's a couple ways we can do this with a <strong>lmer</strong> model. The simplest way is probably</p>
 $$ lmer(measurement \sim 1 + (1|home\_team:year))$$<p><br>
 which creates 120 (30 teams x 4 seasons) totally independent intercepts. This is basically the equivalent of fitting a linear regression with 120 one-hot encoded stadium-season columns.</p>
-<p>However, this probably isn't exactly the right way to do it -- teams likely use the same measurement systems for multiple seasons, so we want some year-to-year correlation between years within a stadium. Instead, I'll set up the model like this:</p>
-$$ lmer(measurement \sim 1 + (1 + year|home\_team)) $$<p>This models each measurement as a function of year (as a slope), but gives each different slope for each stadium. We can still extract the information for each stadium-season combination (the <em>random effects</em>), but the years are correlated.</p>
+<p>However, we probably want some year-to-year correlation between years within a stadium, since they're using the same system. Instead, I'll set up the model like this:</p>
+$$ lmer(measurement \sim 1 + (1 + year|home\_team)) $$<p>We can still extract the information for each stadium-season combination (the <em>random effects</em>), but the years are correlated.</p>
 <p>First up, let's load in all the data and get it ready.</p>
 
 </div>
@@ -13103,10 +13103,10 @@ $$ lmer(measurement \sim 1 + (1 + year|home\_team)) $$<p>This models each measur
 
 
 
-<div id="d7afe747-741a-4fdb-b77d-01c2fbfcf21b"></div>
+<div id="e962e10d-391d-4bd6-bac4-00ae86ce4bab"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#d7afe747-741a-4fdb-b77d-01c2fbfcf21b');
+var element = $('#e962e10d-391d-4bd6-bac4-00ae86ce4bab');
 function toggler(){
     if(window.already_toggling){
         // Don't add multiple buttons.
@@ -13137,17 +13137,7 @@ setTimeout(toggler, 2500);
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">JonahKrop</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">Projects</span><span class="o">/</span><span class="n">Baseball</span><span class="o">/</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
+<div class="cell border-box-sizing code_cell rendered celltag_remove_input">
 
 <div class="output_wrapper">
 <div class="output">
@@ -13170,15 +13160,13 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># load packages</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">pybaseball</span> <span class="kn">import</span> <span class="n">statcast</span> <span class="c1"># querying all the data takes time, so I did this separately</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
 </pre></div>
 
@@ -13189,7 +13177,7 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_2016</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;mlb_2016_measurements.csv&#39;</span><span class="p">)</span>
@@ -13197,15 +13185,21 @@ setTimeout(toggler, 2500);
 <span class="n">df_2018</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;mlb_2018_measurements.csv&#39;</span><span class="p">)</span>
 <span class="n">df_2019</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;mlb_2019_measurements.csv&#39;</span><span class="p">)</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_2016</span><span class="p">,</span> <span class="n">df_2017</span><span class="p">,</span> <span class="n">df_2018</span><span class="p">,</span> <span class="n">df_2019</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># combine each year&#39;s data into 1 df</span>
+<span class="c1"># combine each year&#39;s data into 1 df</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_2016</span><span class="p">,</span> <span class="n">df_2017</span><span class="p">,</span> <span class="n">df_2018</span><span class="p">,</span> <span class="n">df_2019</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">game_date</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">year</span><span class="p">))</span> <span class="c1"># pull year out</span>
+<span class="c1"># add unique ID for each pitch in dataset</span>
+<span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;pitch_id&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))))</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pitch_type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">]</span> <span class="c1"># filter out misreads assigned a number, for some reason</span>
+<span class="c1"># pull year out of date</span>
+<span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">game_date</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>
 
-<span class="n">feats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="c1"># grab columns to calibrate</span>
+<span class="c1"># filter out misreads assigned a number, for some reason</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pitch_type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="o">&lt;=</span><span class="mi">2</span><span class="p">]</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">feats</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team&#39;</span><span class="p">]))</span>
+<span class="c1"># grab columns to calibrate</span>
+<span class="n">feats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -13228,37 +13222,6 @@ setTimeout(toggler, 2500);
 </div>
 </div>
 
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>                    0
-0       release_speed
-1       release_pos_x
-2       release_pos_z
-3   release_extension
-4               pfx_x
-5               pfx_z
-6             plate_x
-7             plate_z
-8                 vx0
-9                 vy0
-10                vz0
-11                 ax
-12                 ay
-13                 az
-14  release_spin_rate
-15       launch_speed
-16       launch_angle
-17    hit_distance_sc
-18               year
-19          home_team
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13266,7 +13229,18 @@ setTimeout(toggler, 2500);
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Setting-up-Data">Setting up Data<a class="anchor-link" href="#Setting-up-Data">&#182;</a></h2><p>There's a bunch of different columns, including stuff like pitcher and batter ID's, the hit type, what inning it is, etc. We only need some of them -- the pitch or batted-ball measurements we're calibrating, like <code>release_speed</code> or <code>launch_angle</code>, and the <code>home_team</code> and <code>year</code> that we're adjusting for. I've printed out the measurements we're using.</p>
+<h2 id="Setting-up-Data">Setting up Data<a class="anchor-link" href="#Setting-up-Data">&#182;</a></h2><p>The data comes with stuff like pitcher and batter ID's, the hit type, what inning it is, etc. We're only calibrating numeric data, which include:</p>
+<ul>
+<li>pitch speed</li>
+<li>pitch release point (x, y, z)</li>
+<li>pitch movement, horizontal and vertical</li>
+<li>pitch initial velocity (x, y, z)</li>
+<li>pitch acceleration (x, y, z)</li>
+<li>pitch spin rate</li>
+<li>batted ball speed</li>
+<li>batted ball launch angle</li>
+<li>batted ball distance</li>
+</ul>
 <p>To make this a little cleaner, I'm going to filter our data down to <em>four-seam fastballs</em> only. That should make it easier to pull out the effects of each stadium on our measurements instead of confusing the model with pitches of different speed and movement profiles. We could add another group for <code>pitch_type</code> to the model, but I think that would unecessarily complicate it. After all, the stadiums aren't selectively choosing to mess up four-seams and not sliders.</p>
 <p>Four-seam fastballs (designated <code>FF</code>) are easily the most common pitch, which makes them an easy choice.</p>
 
@@ -13332,20 +13306,20 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[81]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="n">R</span> <span class="o">-</span><span class="n">i</span> <span class="n">ff</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">lme4</span><span class="p">)</span>
 
-<span class="n">dat</span> <span class="o">&lt;-</span> <span class="n">ff</span><span class="nf">[complete.cases</span><span class="p">(</span><span class="n">ff[</span> <span class="p">,</span> <span class="s">&#39;release_speed&#39;</span><span class="n">]</span><span class="p">),</span><span class="n">]</span> <span class="c1"># drop any nan&#39;s from the current column </span>
-<span class="n">dat_s</span> <span class="o">&lt;-</span> <span class="n">dat</span><span class="nf">[sample</span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">),</span> <span class="m">30000</span><span class="p">),</span><span class="n">]</span> <span class="c1"># will use more than 30k next</span>
+<span class="n">dat</span> <span class="o">&lt;-</span> <span class="n">ff</span><span class="nf">[complete.cases</span><span class="p">(</span><span class="n">ff[</span><span class="p">,</span> <span class="s">&#39;release_speed&#39;</span><span class="n">]</span><span class="p">),</span><span class="n">]</span> <span class="c1"># drop any nan&#39;s </span>
+<span class="n">dat_s</span> <span class="o">&lt;-</span> <span class="n">dat</span><span class="nf">[sample</span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">),</span> <span class="m">20000</span><span class="p">),</span><span class="n">]</span> <span class="c1"># use small sample for ex.</span>
 
 <span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lmer</span><span class="p">(</span><span class="s">&quot;release_speed ~ 1 + (1 + factor(year)|home_team)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dat_s</span><span class="p">)</span>
 
-<span class="n">rnf</span> <span class="o">&lt;-</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">ranef</span><span class="p">(</span><span class="n">model</span><span class="p">))</span> <span class="c1"># we want the model random effects (group-related effects)</span>
+<span class="n">rnf</span> <span class="o">&lt;-</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">ranef</span><span class="p">(</span><span class="n">model</span><span class="p">))</span> <span class="c1"># want random effects (group-related effects)</span>
 
-<span class="nf">print</span><span class="p">(</span><span class="n">rnf</span><span class="nf">[sample</span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">rnf</span><span class="p">),</span> <span class="m">10</span><span class="p">),</span> <span class="n">]</span><span class="p">)</span> <span class="c1"># sample 10 random rows</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">rnf</span><span class="nf">[sample</span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">rnf</span><span class="p">),</span> <span class="m">10</span><span class="p">),</span><span class="n">]</span><span class="p">)</span> <span class="c1"># sample 10 random rows</span>
 </pre></div>
 
     </div>
@@ -13361,18 +13335,30 @@ setTimeout(toggler, 2500);
     <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>R[write to console]: Loading required package: Matrix
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>       grpvar             term grp      condval    condsd
-6   home_team      (Intercept) CIN  0.002779645 0.1559934
-19  home_team      (Intercept) NYY  0.434896963 0.1533123
-115 home_team factor(year)2019  SF  0.084133084 0.2138915
-79  home_team factor(year)2018 NYY  0.666105921 0.2108993
-17  home_team      (Intercept) MIN -0.298585815 0.1562730
-62  home_team factor(year)2018 ATL -0.496495155 0.2117511
-26  home_team      (Intercept) STL  0.323564909 0.1698325
-56  home_team factor(year)2017 STL  0.049978586 0.2202466
-2   home_team      (Intercept) ATL  0.265450108 0.1518724
-58  home_team factor(year)2017 TEX  0.814765374 0.2234065
+<pre>       grpvar             term grp     condval    condsd
+99  home_team factor(year)2019 CWS  0.03027862 0.2187904
+100 home_team factor(year)2019 DET -0.22872708 0.2105202
+86  home_team factor(year)2018 STL -0.51865478 0.2459780
+106 home_team factor(year)2019 MIL  0.20776771 0.2215125
+7   home_team      (Intercept) CLE -0.19591814 0.1579174
+6   home_team      (Intercept) CIN  0.20738349 0.1589340
+54  home_team factor(year)2017 SEA  0.41784603 0.2148491
+14  home_team      (Intercept) LAD  0.22149546 0.1565748
+77  home_team factor(year)2018 MIN  0.24593685 0.2438196
+85  home_team factor(year)2018  SF  0.06732585 0.2519992
 </pre>
 </div>
 </div>
@@ -13384,7 +13370,7 @@ setTimeout(toggler, 2500);
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's look real quick at these random effects in the <code>condval</code> column. They're telling us the bias each stadium has in a given year. For example, Cincinnati was pretty much right on the money in 2016 compared to other stadiums. On the other hand, the Texas system was around 0.8 mph hot in 2017. These are pretty small adjustments overall, which is good.</p>
+<p>Let's look real quick at these random effects in the <code>condval</code> column. They're telling us the bias each stadium has in a given year. For example, the Chicago White Sox were pretty much right on the money in 2019 compared to other stadiums. On the other hand, the St. Louis stadium was around 0.5 mph cold in 2018. These are pretty small adjustments overall, which is good.</p>
 <p>Time to finish this off by looping through all the measurements.</p>
 
 </div>
@@ -13392,7 +13378,7 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[82]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="n">R</span> <span class="o">-</span><span class="n">i</span> <span class="n">ff</span><span class="p">,</span><span class="n">feats</span> <span class="o">-</span><span class="n">o</span> <span class="n">adj</span>
@@ -13404,12 +13390,12 @@ setTimeout(toggler, 2500);
 
 <span class="nf">for</span><span class="p">(</span><span class="n">f</span> <span class="n">in</span> <span class="n">feats</span><span class="p">){</span>
     
-    <span class="c1">#print(f)</span>
+    <span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Currently doing&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 
-    <span class="n">dat</span> <span class="o">&lt;-</span> <span class="n">ff</span><span class="nf">[complete.cases</span><span class="p">(</span><span class="n">ff[</span> <span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="n">]</span><span class="p">),</span><span class="n">]</span> <span class="c1"># drop any nan&#39;s from the current column </span>
+    <span class="n">dat</span> <span class="o">&lt;-</span> <span class="n">ff</span><span class="nf">[complete.cases</span><span class="p">(</span><span class="n">ff[</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="n">]</span><span class="p">),</span><span class="n">]</span> <span class="c1"># drop any nan&#39;s</span>
     <span class="n">dat_s</span> <span class="o">&lt;-</span> <span class="n">dat</span><span class="nf">[sample</span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">),</span> <span class="m">175000</span><span class="p">),</span><span class="n">]</span> <span class="c1"># sample 175k data points</span>
 
-    <span class="n">eqn</span> <span class="o">&lt;-</span> <span class="nf">paste</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot; ~ 1 + (1 + factor(year)|home_team)&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="c1"># set eqn for each loop</span>
+    <span class="n">eqn</span> <span class="o">&lt;-</span> <span class="nf">paste</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot; ~ 1 + (1 + factor(year)|home_team)&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="c1"># set eqn</span>
     <span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lmer</span><span class="p">(</span><span class="n">eqn</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dat_s</span><span class="p">)</span> 
 
     <span class="n">rnf</span> <span class="o">&lt;-</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">ranef</span><span class="p">(</span><span class="n">model</span><span class="p">))</span> <span class="c1"># extract random/group effects</span>
@@ -13429,7 +13415,7 @@ setTimeout(toggler, 2500);
 
 <span class="p">}</span>
 
-<span class="nf">print</span><span class="p">(</span><span class="s">&#39;Finished!&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">&#39;Done!&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13446,7 +13432,7 @@ setTimeout(toggler, 2500);
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Finished!
+<pre>Done!
 </pre>
 </div>
 </div>
@@ -13463,7 +13449,7 @@ setTimeout(toggler, 2500);
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[79]:</div>
+    <div class="prompt output_prompt">Out[45]:</div>
 
 
 
@@ -13486,258 +13472,258 @@ setTimeout(toggler, 2500);
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>home_team</th>
-      <th>year</th>
-      <th>release_speed</th>
-      <th>release_pos_x</th>
-      <th>release_pos_z</th>
-      <th>release_extension</th>
-      <th>pfx_x</th>
-      <th>pfx_z</th>
-      <th>plate_x</th>
-      <th>plate_z</th>
-      <th>vx0</th>
-      <th>vy0</th>
-      <th>vz0</th>
-      <th>ax</th>
-      <th>ay</th>
-      <th>az</th>
-      <th>release_spin_rate</th>
-      <th>launch_speed</th>
-      <th>launch_angle</th>
-      <th>hit_distance_sc</th>
+      <th>home_team_adj</th>
+      <th>year_adj</th>
+      <th>release_speed_adj</th>
+      <th>release_pos_x_adj</th>
+      <th>release_pos_z_adj</th>
+      <th>release_extension_adj</th>
+      <th>pfx_x_adj</th>
+      <th>pfx_z_adj</th>
+      <th>plate_x_adj</th>
+      <th>plate_z_adj</th>
+      <th>vx0_adj</th>
+      <th>vy0_adj</th>
+      <th>vz0_adj</th>
+      <th>ax_adj</th>
+      <th>ay_adj</th>
+      <th>az_adj</th>
+      <th>release_spin_rate_adj</th>
+      <th>launch_speed_adj</th>
+      <th>launch_angle_adj</th>
+      <th>hit_distance_sc_adj</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>8</th>
+      <th>9</th>
       <td>BAL</td>
       <td>2016</td>
-      <td>-0.510510</td>
-      <td>-0.597138</td>
-      <td>0.190552</td>
-      <td>0.021612</td>
-      <td>-0.194478</td>
-      <td>0.259603</td>
-      <td>-0.071342</td>
-      <td>0.048706</td>
-      <td>1.051602</td>
-      <td>0.822786</td>
-      <td>-0.686741</td>
-      <td>-1.126133</td>
-      <td>-0.377144</td>
-      <td>0.838824</td>
-      <td>8.637389</td>
-      <td>0.449039</td>
-      <td>1.375786</td>
-      <td>3.202126</td>
+      <td>-0.665114</td>
+      <td>-0.596661</td>
+      <td>0.183224</td>
+      <td>0.042987</td>
+      <td>-0.158126</td>
+      <td>0.257663</td>
+      <td>-0.109822</td>
+      <td>0.035054</td>
+      <td>1.199592</td>
+      <td>0.916792</td>
+      <td>-0.749416</td>
+      <td>-0.758209</td>
+      <td>-0.523453</td>
+      <td>0.926139</td>
+      <td>16.965000</td>
+      <td>0.365157</td>
+      <td>0.771964</td>
+      <td>3.660817</td>
     </tr>
     <tr>
-      <th>36</th>
-      <td>DET</td>
+      <th>118</th>
+      <td>WSH</td>
+      <td>2017</td>
+      <td>0.131364</td>
+      <td>-0.023629</td>
+      <td>-0.032750</td>
+      <td>0.126519</td>
+      <td>0.221559</td>
+      <td>0.013088</td>
+      <td>0.025520</td>
+      <td>0.172728</td>
+      <td>0.515498</td>
+      <td>-0.074720</td>
+      <td>0.080553</td>
+      <td>1.382180</td>
+      <td>-1.152256</td>
+      <td>2.920386</td>
+      <td>-33.361535</td>
+      <td>-1.530530</td>
+      <td>-0.892981</td>
+      <td>0.727508</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>WSH</td>
       <td>2016</td>
-      <td>-0.061513</td>
-      <td>0.170506</td>
-      <td>0.164895</td>
-      <td>0.005948</td>
-      <td>-0.087133</td>
-      <td>0.215798</td>
-      <td>-0.057400</td>
-      <td>0.075801</td>
-      <td>-0.455988</td>
-      <td>0.226531</td>
-      <td>-0.506924</td>
-      <td>-0.335643</td>
-      <td>-0.088135</td>
-      <td>0.318313</td>
-      <td>49.529476</td>
-      <td>0.907686</td>
-      <td>1.242421</td>
-      <td>0.093932</td>
+      <td>0.158367</td>
+      <td>-0.312992</td>
+      <td>0.102178</td>
+      <td>0.080367</td>
+      <td>-0.203257</td>
+      <td>0.144449</td>
+      <td>-0.028427</td>
+      <td>-0.023223</td>
+      <td>0.577288</td>
+      <td>-0.024886</td>
+      <td>-0.318594</td>
+      <td>-1.262856</td>
+      <td>1.575742</td>
+      <td>-0.351213</td>
+      <td>-10.059471</td>
+      <td>0.921003</td>
+      <td>-0.409724</td>
+      <td>-2.164061</td>
     </tr>
     <tr>
-      <th>48</th>
-      <td>LAA</td>
-      <td>2016</td>
-      <td>-0.636827</td>
-      <td>-0.390667</td>
-      <td>0.185525</td>
-      <td>-0.156839</td>
-      <td>-0.140808</td>
-      <td>0.343456</td>
-      <td>0.056897</td>
-      <td>-0.097540</td>
-      <td>0.886882</td>
-      <td>0.717110</td>
-      <td>-0.977859</td>
-      <td>-0.776145</td>
-      <td>3.284549</td>
-      <td>1.696185</td>
-      <td>-7.096078</td>
-      <td>1.901549</td>
-      <td>-1.492332</td>
-      <td>6.292540</td>
-    </tr>
-    <tr>
-      <th>32</th>
-      <td>CWS</td>
-      <td>2016</td>
-      <td>0.112887</td>
-      <td>0.450790</td>
-      <td>0.100072</td>
-      <td>0.061165</td>
-      <td>0.004471</td>
-      <td>0.019355</td>
-      <td>0.004254</td>
-      <td>-0.056835</td>
-      <td>-1.273091</td>
-      <td>-0.357944</td>
-      <td>0.194173</td>
-      <td>2.277609</td>
-      <td>3.663490</td>
-      <td>-2.060872</td>
-      <td>-5.636805</td>
-      <td>-0.006392</td>
-      <td>-0.994028</td>
-      <td>-2.675445</td>
-    </tr>
-    <tr>
-      <th>42</th>
-      <td>HOU</td>
+      <th>87</th>
+      <td>PIT</td>
       <td>2018</td>
-      <td>1.344187</td>
-      <td>-0.024138</td>
-      <td>-0.190997</td>
-      <td>-0.102266</td>
-      <td>-0.339637</td>
-      <td>-0.231504</td>
-      <td>0.035639</td>
-      <td>0.133417</td>
-      <td>2.327653</td>
-      <td>-2.102197</td>
-      <td>0.125057</td>
-      <td>-7.207391</td>
-      <td>0.942031</td>
-      <td>0.356583</td>
-      <td>56.264839</td>
-      <td>0.037161</td>
-      <td>3.195020</td>
-      <td>5.540251</td>
+      <td>-0.595953</td>
+      <td>0.357333</td>
+      <td>0.043784</td>
+      <td>-0.129942</td>
+      <td>0.159812</td>
+      <td>-0.152779</td>
+      <td>0.071593</td>
+      <td>0.083827</td>
+      <td>-0.345524</td>
+      <td>0.618555</td>
+      <td>0.679801</td>
+      <td>0.542230</td>
+      <td>-1.371185</td>
+      <td>0.540222</td>
+      <td>45.439449</td>
+      <td>-0.576456</td>
+      <td>3.644723</td>
+      <td>-4.373510</td>
     </tr>
     <tr>
-      <th>56</th>
-      <td>MIA</td>
-      <td>2016</td>
-      <td>-0.020091</td>
-      <td>0.052661</td>
-      <td>0.045707</td>
-      <td>-0.099727</td>
-      <td>0.043097</td>
-      <td>0.230498</td>
-      <td>-0.026347</td>
-      <td>-0.082584</td>
-      <td>-0.201811</td>
-      <td>0.013292</td>
-      <td>-0.357084</td>
-      <td>1.114391</td>
-      <td>3.039751</td>
-      <td>0.449757</td>
-      <td>-23.096507</td>
-      <td>0.600040</td>
-      <td>-2.045270</td>
-      <td>-2.240236</td>
-    </tr>
-    <tr>
-      <th>55</th>
-      <td>LAD</td>
-      <td>2019</td>
-      <td>-0.028537</td>
-      <td>-0.064407</td>
-      <td>0.045400</td>
-      <td>0.063008</td>
-      <td>0.040198</td>
-      <td>-0.251420</td>
-      <td>-0.051944</td>
-      <td>0.084741</td>
-      <td>-0.239736</td>
-      <td>0.075006</td>
-      <td>0.393091</td>
-      <td>-1.067593</td>
-      <td>-2.053485</td>
-      <td>-0.898262</td>
-      <td>39.001695</td>
-      <td>0.249144</td>
-      <td>1.905800</td>
-      <td>2.400335</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>BAL</td>
-      <td>2018</td>
-      <td>0.405076</td>
-      <td>0.358630</td>
-      <td>-0.163744</td>
-      <td>-0.234619</td>
-      <td>0.071743</td>
-      <td>-0.234530</td>
-      <td>0.038297</td>
-      <td>-0.002379</td>
-      <td>-0.061348</td>
-      <td>-0.777051</td>
-      <td>0.818555</td>
-      <td>-1.015286</td>
-      <td>1.208180</td>
-      <td>-0.622178</td>
-      <td>6.320528</td>
-      <td>0.236467</td>
-      <td>-0.690093</td>
-      <td>-1.089245</td>
-    </tr>
-    <tr>
-      <th>92</th>
+      <th>93</th>
       <td>SEA</td>
       <td>2016</td>
-      <td>0.137839</td>
-      <td>0.170964</td>
-      <td>-0.078503</td>
-      <td>-0.009721</td>
-      <td>0.009131</td>
-      <td>-0.052193</td>
-      <td>-0.123089</td>
-      <td>-0.034381</td>
-      <td>-1.315689</td>
-      <td>-0.186106</td>
-      <td>0.281083</td>
-      <td>1.614864</td>
-      <td>6.116050</td>
-      <td>-3.211002</td>
-      <td>-44.414718</td>
-      <td>0.513673</td>
-      <td>0.693682</td>
-      <td>3.407638</td>
+      <td>0.079058</td>
+      <td>0.260467</td>
+      <td>-0.082249</td>
+      <td>-0.014972</td>
+      <td>0.030073</td>
+      <td>-0.058468</td>
+      <td>-0.167741</td>
+      <td>-0.066843</td>
+      <td>-1.330596</td>
+      <td>-0.259469</td>
+      <td>0.296946</td>
+      <td>2.080479</td>
+      <td>6.088463</td>
+      <td>-3.006621</td>
+      <td>-44.430763</td>
+      <td>0.061020</td>
+      <td>0.413762</td>
+      <td>-0.432139</td>
     </tr>
     <tr>
-      <th>100</th>
-      <td>STL</td>
+      <th>61</th>
+      <td>MIL</td>
       <td>2016</td>
-      <td>0.685927</td>
-      <td>0.369038</td>
-      <td>0.180679</td>
-      <td>0.025787</td>
-      <td>-0.220094</td>
-      <td>0.079533</td>
-      <td>0.000638</td>
-      <td>-0.030609</td>
-      <td>-0.065303</td>
-      <td>-0.704324</td>
-      <td>0.029639</td>
-      <td>-1.928041</td>
-      <td>2.807308</td>
-      <td>-1.175540</td>
-      <td>-37.758520</td>
-      <td>1.573100</td>
-      <td>-1.073281</td>
-      <td>-0.048739</td>
+      <td>-0.302048</td>
+      <td>-0.169880</td>
+      <td>0.085421</td>
+      <td>0.048986</td>
+      <td>-0.107250</td>
+      <td>0.103033</td>
+      <td>0.041000</td>
+      <td>-0.126731</td>
+      <td>0.616790</td>
+      <td>0.422007</td>
+      <td>-0.209162</td>
+      <td>0.225745</td>
+      <td>0.419169</td>
+      <td>-1.037101</td>
+      <td>-61.029575</td>
+      <td>1.356242</td>
+      <td>-3.330852</td>
+      <td>0.031184</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>TOR</td>
+      <td>2019</td>
+      <td>0.439265</td>
+      <td>-0.038793</td>
+      <td>-0.250653</td>
+      <td>0.111059</td>
+      <td>0.217895</td>
+      <td>-0.276842</td>
+      <td>0.063745</td>
+      <td>0.228165</td>
+      <td>0.017161</td>
+      <td>-0.964024</td>
+      <td>1.513553</td>
+      <td>0.640198</td>
+      <td>-2.117788</td>
+      <td>-0.666782</td>
+      <td>-19.557841</td>
+      <td>-0.895855</td>
+      <td>3.000951</td>
+      <td>14.823576</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>SD</td>
+      <td>2018</td>
+      <td>-0.286797</td>
+      <td>0.157315</td>
+      <td>-0.016293</td>
+      <td>-0.072326</td>
+      <td>0.027385</td>
+      <td>-0.282164</td>
+      <td>0.087331</td>
+      <td>0.091351</td>
+      <td>0.411884</td>
+      <td>0.791522</td>
+      <td>1.245549</td>
+      <td>-1.778304</td>
+      <td>1.267476</td>
+      <td>-1.084069</td>
+      <td>1.178101</td>
+      <td>-0.138381</td>
+      <td>1.317442</td>
+      <td>3.723560</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>LAD</td>
+      <td>2016</td>
+      <td>0.090104</td>
+      <td>0.400711</td>
+      <td>0.033926</td>
+      <td>-0.045183</td>
+      <td>0.018024</td>
+      <td>0.257064</td>
+      <td>0.009308</td>
+      <td>0.015781</td>
+      <td>-1.086774</td>
+      <td>-0.003660</td>
+      <td>-0.383327</td>
+      <td>1.688479</td>
+      <td>1.479914</td>
+      <td>1.137169</td>
+      <td>18.404283</td>
+      <td>-0.540037</td>
+      <td>0.364940</td>
+      <td>-0.707187</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>NYY</td>
+      <td>2016</td>
+      <td>0.548299</td>
+      <td>0.260459</td>
+      <td>0.201866</td>
+      <td>-0.023413</td>
+      <td>-0.100093</td>
+      <td>0.239287</td>
+      <td>-0.197624</td>
+      <td>-0.051004</td>
+      <td>-0.828299</td>
+      <td>-0.719983</td>
+      <td>-1.187804</td>
+      <td>-0.120464</td>
+      <td>1.583945</td>
+      <td>1.096362</td>
+      <td>4.575658</td>
+      <td>1.059330</td>
+      <td>-2.294020</td>
+      <td>-4.813683</td>
     </tr>
   </tbody>
 </table>
@@ -13753,7 +13739,7 @@ setTimeout(toggler, 2500);
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>We're done! Above is a sampling of the adjustments. What each entry tells us is the size of the bias for each measurement for each stadium and season. Using the first entry as an example, Baltimore's stadium in 2016 measured release speed about 0.5 mph low. So, we'll add 0.510 mph to all the pitches thrown in Baltimore in 2016.</p>
+<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>We're done! Above is a sampling of the adjustments. What each entry tells us is the size of the bias for each measurement for each stadium and season. Using the first entry as an example, Baltimore's stadium in 2016 measured release speed around 0.6 mph low. So, we'll add 0.665 mph to all the pitches thrown in Baltimore in 2016.</p>
 <p>I'll just join these results in with our original set of data and we'll be all set.</p>
 
 </div>
@@ -13761,21 +13747,25 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[80]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adj</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_adj&#39;</span><span class="p">)</span> <span class="c1"># add suffix so column names aren&#39;t the same (oops)</span>
-<span class="n">df_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="c1"># save original columns</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># add suffix so column names aren&#39;t the same (oops)</span>
+<span class="n">adj</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_adj&#39;</span><span class="p">)</span>
+<span class="n">df_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
-<span class="n">df_adj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">adj</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team&#39;</span><span class="p">],</span> <span class="n">right_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year_adj&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team_adj&#39;</span><span class="p">])</span>
+<span class="n">df_adj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">adj</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> 
+                  <span class="n">left_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team&#39;</span><span class="p">],</span> 
+                  <span class="n">right_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year_adj&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team_adj&#39;</span><span class="p">])</span>
 
 <span class="c1"># apply adjustment to each column</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feats</span><span class="p">:</span>
     <span class="n">f_adj</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="s1">&#39;_adj&#39;</span>
     <span class="n">df_adj</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_adj</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_adj</span><span class="p">[</span><span class="n">f_adj</span><span class="p">]</span>
 
-<span class="n">df_adj</span> <span class="o">=</span> <span class="n">df_adj</span><span class="p">[</span><span class="n">df_cols</span><span class="p">]</span>
-<span class="n">df_adj</span><span class="p">[</span><span class="n">feats</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_adj</span><span class="p">[</span><span class="n">feats</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># no need for lots of decimal places</span>
+<span class="c1"># finalize df</span>
+<span class="n">df_save</span> <span class="o">=</span> <span class="n">df_adj</span><span class="p">[</span><span class="n">df_cols</span><span class="p">]</span>
+<span class="n">df_save</span><span class="p">[</span><span class="n">feats</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_save</span><span class="p">[</span><span class="n">feats</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># no need for lots of decimal places</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Success!&#39;</span><span class="p">)</span>
 </pre></div>
