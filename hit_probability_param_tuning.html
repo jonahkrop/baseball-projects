@@ -13100,10 +13100,10 @@ div#notebook {
 
 
 
-<div id="203a1abf-61ee-4ad2-9077-7b4cf190668c"></div>
+<div id="245aa120-e7d4-41eb-a22a-606de91097a4"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#203a1abf-61ee-4ad2-9077-7b4cf190668c');
+var element = $('#245aa120-e7d4-41eb-a22a-606de91097a4');
 function toggler(){
     if(window.already_toggling){
         // Don't add multiple buttons.
@@ -13146,7 +13146,7 @@ setTimeout(toggler, 2500);
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>C:\Users\JKrop\Downloads
+<pre>/Users/JonahKrop/Documents/Projects/Baseball
 </pre>
 </div>
 </div>
@@ -13157,7 +13157,7 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -13166,10 +13166,10 @@ setTimeout(toggler, 2500);
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">time</span> <span class="k">as</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">cross_validate</span><span class="p">,</span> <span class="n">GridSearchCV</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">log_loss</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">make_scorer</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">GradientBoostingClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">cross_validate</span><span class="p">,</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">log_loss</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">make_scorer</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
 </pre></div>
 
     </div>
@@ -13179,7 +13179,7 @@ setTimeout(toggler, 2500);
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># load in data</span>
@@ -13203,16 +13203,35 @@ setTimeout(toggler, 2500);
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/anaconda3/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3063: DtypeWarning: Columns (14) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[74]:</div>
+<div class="prompt input_prompt">In&nbsp;[100]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_model</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># stand = handedness</span>
-<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="s1">&#39;stand&#39;</span><span class="p">,</span> <span class="s1">&#39;launch_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;launch_angle&#39;</span><span class="p">,</span> <span class="s1">&#39;direction&#39;</span><span class="p">]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pitch_id&#39;</span><span class="p">,</span> <span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="s1">&#39;stand&#39;</span><span class="p">,</span> <span class="s1">&#39;launch_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;launch_angle&#39;</span><span class="p">,</span> <span class="s1">&#39;direction&#39;</span><span class="p">]</span>
 
 <span class="c1"># 1) drop bunts</span>
 <span class="n">df_model</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[</span><span class="n">cols</span><span class="p">][</span><span class="o">~</span><span class="n">df_model</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
@@ -13299,6 +13318,13 @@ setTimeout(toggler, 2500);
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13760,7 +13786,7 @@ log loss with optimal parameters: -0.495
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Wrapping-Up">Wrapping Up<a class="anchor-link" href="#Wrapping-Up">&#182;</a></h3><p>Successfully completed hyperparameter tuning! I didn't get a massive improvement in log loss (-0.515 to -0.495), but I'm still happy with the results. Here's the ultimate optimal parameters:</p>
+<h3 id="Tuning-Summary">Tuning Summary<a class="anchor-link" href="#Tuning-Summary">&#182;</a></h3><p>Successfully completed hyperparameter tuning! I didn't get a massive improvement in log loss (-0.515 to -0.495), but I'm still happy with the results. Here's the ultimate optimal parameters:</p>
 <ul>
 <li>learning rate = 0.05</li>
 <li>number of trees = 300</li>
@@ -13768,6 +13794,273 @@ log loss with optimal parameters: -0.495
 <li>min samples to split node = 4</li>
 <li>min samples to split leaf = 10</li>
 </ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Validating">Validating<a class="anchor-link" href="#Validating">&#182;</a></h3><p>Before I wrap up, I want to make sure that my predicted outcomes line up with reality. I'll do a quick prediction using the above parameters, and make sure that each possible outcome occurs with the same frequency in my predictions as in real life.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[101]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">s_test</span> <span class="o">=</span> <span class="n">df_model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># scale and center numeric columns</span>
+<span class="n">to_scale</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;launch_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;launch_angle&#39;</span><span class="p">,</span> <span class="s1">&#39;direction&#39;</span><span class="p">]</span>
+<span class="n">s_test</span><span class="p">[</span><span class="n">to_scale</span><span class="p">]</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">s_test</span><span class="p">[</span><span class="n">to_scale</span><span class="p">])</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">s_test</span><span class="p">[</span><span class="n">to_scale</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;is_Right&#39;</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">s_test</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span>
+
+<span class="c1"># train-test split</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+
+<span class="c1"># setup gradient boosting with tuned parameters</span>
+<span class="n">test_model</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+
+<span class="n">test_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">event_pred</span> <span class="o">=</span> <span class="n">test_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered celltag_remove_input">
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>outcome</th>
+      <th>actually_occurs</th>
+      <th>predicted_occurs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>double</td>
+      <td>0.066250</td>
+      <td>0.048833</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>home_run</td>
+      <td>0.046883</td>
+      <td>0.047150</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>out</td>
+      <td>0.670017</td>
+      <td>0.713717</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>single</td>
+      <td>0.210517</td>
+      <td>0.189783</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>triple</td>
+      <td>0.006333</td>
+      <td>0.000517</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="SMOTE-lied-to-me!">SMOTE lied to me!<a class="anchor-link" href="#SMOTE-lied-to-me!">&#182;</a></h3><p>Well, not really. Fully balancing my training data was overkill and made my models perform worse. But I think I need to make some small tweaks to my training data sample, since the model isn't predicting an accurate distribution of outcomes.</p>
+<p>Outs are overrepresented in the results, so it looks like their prominence in the training data made the model overstate their importance. I'm going to try some limited resampling of my training data to try to fix this. Considering that outs make up the majority of batted ball outcomes, I'm most concerned about bringing down the frequency of outs. To start, I'll try just reducing the number of outs in the training data, which should help improve the results for other classes as well.</p>
+<p>Frankly, I'm not too concerned about balancing triples. More than any other hit type, they depend on things like defensive positioning and field dimensions, which means they're going to be really hard for this model to pick up on regardless of how often they occur.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[103]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">resample_outs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Take a set of x &amp; y training data and resample amount and adjust the number of outs.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># set number of samples for event</span>
+    <span class="n">samp_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="s1">&#39;out&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">change</span><span class="p">)</span>
+
+    <span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">samp</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">samp_size</span><span class="p">)</span>
+
+    <span class="c1"># replace all outs with sample of outs</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;out&#39;</span><span class="p">],</span> <span class="n">samp</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">x_resample</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">to_scale</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;is_Right&#39;</span><span class="p">]]</span>
+    <span class="n">y_resample</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">x_resample</span><span class="p">,</span> <span class="n">y_resample</span>
+
+
+<span class="c1"># reduce outs in training data by 20%</span>
+<span class="n">X_train_resample</span><span class="p">,</span> <span class="n">y_train_resample</span> <span class="o">=</span> <span class="n">resample_outs</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+
+<span class="c1"># refit model &amp; make predictions</span>
+<span class="n">test_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_resample</span><span class="p">,</span> <span class="n">y_train_resample</span><span class="p">)</span>
+<span class="n">event_pred</span> <span class="o">=</span> <span class="n">test_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered celltag_remove_input">
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>outcome</th>
+      <th>actually_occurs</th>
+      <th>predicted_occurs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>double</td>
+      <td>0.066250</td>
+      <td>0.052950</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>home_run</td>
+      <td>0.046883</td>
+      <td>0.049267</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>out</td>
+      <td>0.670017</td>
+      <td>0.679683</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>single</td>
+      <td>0.210517</td>
+      <td>0.217617</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>triple</td>
+      <td>0.006333</td>
+      <td>0.000483</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Reducing the number of outs in the training data by 20% brings <code>out</code> and <code>single</code> frequencies within 1% of their actual occurences, and almost brings <code>double</code> occurences that close as well. Given that, I'm going to leave it like this and not address triples (hopefully I don't end up eating my own words).</p>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>To wrap up, I've finalized how I want my model to work. I've tuned my hyperparameters as such:</p>
+<ul>
+<li>learning rate = 0.05</li>
+<li>number of trees = 300</li>
+<li>max tree depth = 4</li>
+<li>min samples to split node = 4</li>
+<li>min samples to split leaf = 10</li>
+</ul>
+<p>and I'm going to undersample outs in my training data by 20% to help the model more accurately predict the frequency of batted ball outcomes.</p>
 
 </div>
 </div>
