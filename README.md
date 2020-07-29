@@ -5,3 +5,5 @@ All my baseball-related research is here! I started with `statcast_calibrations.
 In addition to that exercise in data cleaning, I hope to add research in hit probabilities, strike probabilities, defensive value, and some other various research topics related to those projects.
 
 First up, I'm looking at hit probabilities. I researched several different models, ultimately settling on a gradient boosting algorithm, and then did some hyperparameter tuning.
+
+Most recently, I've added `xwOBA_validation.html`, where I use my true-talent hit probability model to estimate xwOBA and test its performance.
